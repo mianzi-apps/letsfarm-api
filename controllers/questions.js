@@ -30,7 +30,7 @@ const Question = {
      * @return {object} question
      */
     getOne(req,res){
-        const question = QuestionModel.findOne(res.params.id);
+        const question = QuestionModel.findOne(req.params.id);
         if(!question)
             return res.status(404).send({'message':'question not found'});
         return res.status(200).send(question);
