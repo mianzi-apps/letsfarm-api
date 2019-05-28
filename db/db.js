@@ -21,9 +21,9 @@ const usersTbText = `
              password VARCHAR(200),
              auth_token VARCHAR(200),
              log_type VARCHAR(50),
-             role TEXT , 
+             role TEXT, 
              created_at TIMESTAMP,
-             update_at TIMESTAMP
+             updated_at TIMESTAMP
         )
 `;
 
@@ -150,9 +150,8 @@ const plantTbtexxt = `
  * Create Tables
  */
  const createTables =async () => {
-    
     //get all sql stmts
-    const sqlStrings = [usersTbText,]
+    const sqlStrings = [usersTbText,];
     
     //iterate through stmts to create tables
     sqlStrings.forEach(stmt=>{
