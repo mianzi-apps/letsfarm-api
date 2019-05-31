@@ -49,7 +49,7 @@ class UserModel{
         const query = QueryBuilder.fetch('users','*',user);
 
         return this.pool.query(query).then((result)=>{
-            if(length(result.rows)>0){
+            if(result.rows.length>0){
                 return result.rows[0];
             }else{
                 return 'failure';
