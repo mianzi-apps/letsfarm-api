@@ -13,8 +13,16 @@ class QueryBuilder{
         let clause = "";
         Object.keys(object).map((key)=>{
             clause+=key+"='"+object[key]+"' and "
-        })
+        });
         return clause.substring(0,clause.length-4);
+    }
+
+    createKeyValues(object){
+        let clause = "";
+        Object.keys(object).map((key)=>{
+            clause+=key+"='"+object[key]+"' ,"
+        });
+        return clause.substring(0,clause.length-1);
     }
 
     insert(table,object){
@@ -27,14 +35,20 @@ class QueryBuilder{
         const whereClause = new QueryBuilder().createWhereClause(object);
         return `SELECT ${columns} FROM ${table} WHERE ${whereClause}`;
     }
+
+    fetchAll(table,columns){
+        return `SELECT ${columns} FROM ${table} `;
+    }
     
-    update(table,columnsValuesStr){
-        return `UPDATE ${table} SET ${columnsValuesStr}`;
+    update(table,object,whereClause){
+        const setString = new QueryBuilder().createKeyValues(object);
+        return `UPDATE ${table} SET ${setString} WHERE ${whereClause}`;
     }
     
     deleteFromTable(table,whereClause){
-        return `DELETE FROM ${table} ${whereClause}`;
+        return `DELETE FROM ${table} WHERE ${whereClause}`;
     }
+
 }
 
 

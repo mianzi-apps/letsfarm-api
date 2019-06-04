@@ -6,12 +6,18 @@ const Question = {
      * @param res
      * @return {object} question
      */
-    create(req,res){
+    async create(req,res){
         if (!req.body.title && !req.body.body) {
             return res.status(400).send({'message': 'All fields are required'})
         }
-        const question = QuestionModel.create(req.body);
-        return res.status(201).send(question);
+        req.body.logged_user=req.decoded.id;
+        const result =await QuestionModel.create(req.body);
+        if(result==='failure'){
+            return res.status(400).send({'success':false, 'message':'operation failed'});
+        }else{
+            return res.status(201).send({'success':true});
+        }
+
     },
 
     /***
@@ -19,9 +25,11 @@ const Question = {
      * @param res
      * @return {object} questions
      */
-    getAll(req,res){
-        const questions = QuestionModel.findAll();
-        return res.status(200).send(questions);
+    async getAll(req,res){
+        const result = await QuestionModel.findAll();
+        if(result==='failure')
+            return res.status(400).send({success:false, message: 'could not perform action'});
+        return res.status(200).send({success:true, questions:result});
     },
 
     /***
@@ -29,11 +37,11 @@ const Question = {
      * @param res
      * @return {object} question
      */
-    getOne(req,res){
-        const question = QuestionModel.findOne(req.params.id);
-        if(!question)
-            return res.status(404).send({'message':'question not found'});
-        return res.status(200).send(question);
+    async getOne(req,res){
+        const result = await QuestionModel.findOne(req.params.id);
+        if(result==='failure')
+            return res.status(404).send({'success':false, 'message':'question not found'});
+        return res.status(200).send({'success':true, 'question':result});
     },
 
     /***
@@ -41,12 +49,18 @@ const Question = {
      * @param req
      * @return {*|void}
      */
-    update(res,req){
-        const question = QuestionModel.findOne(req.params.id);
-        if(!question)
-            return res.status(404).send({'message':'question not found'});
-        const updateQuestion = QuestionModel.update(req.params.id,req.body);
-        return res.status(200).send(updateQuestion);
+    async update(req,res){
+        const result = await QuestionModel.findOne(req.params.qn_id);
+        if(result==='failure')
+            return res.status(404).send({'success': false, 'message':'question not found'});
+
+        else if(req.decoded.id!==result.created_by) //ensure only owner updates
+            return res.status(400).send({'success': false, 'message':'you are not authorized to perform this action'});
+
+        const updateResult = await QuestionModel.update(result,req.body);
+        if (updateResult==='failure')
+            return res.status(400).send({'success': false,'message':'question update failed'});
+        return res.status(200).send({'success': true,'message':'update successful'});
     },
 
     /***
@@ -55,12 +69,17 @@ const Question = {
      * @param req
      * @return {object}
      */
-    delete(res,req){
-        const question = QuestionModel.findOne(req.params.id);
-        if(!question)
-            return res.status(404).send({'message':'question not found'});
-        const deleteQuestion = QuestionModel.delete(req.params.id);
-        return res.status(200).send(deleteQuestion);
+    async delete(req,res){
+        const result = await QuestionModel.findOne(req.params.id);
+        if(result==='failure')
+            return res.status(404).send({success:false, 'message':'question not found'});
+        else if(req.decoded.id!==result.created_by) //ensure only owner updates
+            return res.status(400).send({'success': false, 'message':'you are not authorized to perform this action'});
+
+        const deleteResult = await QuestionModel.delete(req.params.id);
+        if (deleteResult==='failure')
+            return res.status(400).send({'success': false,'message':'question deletion failed'});
+        return res.status(200).send({success:true, 'message':'question deleted successfully'});
     }
 
 };
