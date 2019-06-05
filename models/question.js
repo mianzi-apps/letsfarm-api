@@ -1,5 +1,9 @@
 import moment from 'moment';
 import uuid from 'uuid';
+const { Pool } = require('pg');
+const dotenv = require('dotenv');
+dotenv.config();
+import QueryBuilder from '../db/queryBuilder';
 
 class Question {
 
@@ -7,7 +11,11 @@ class Question {
      * class constructor
      */
     constructor(){
-        this.questions=[];
+        this.pool=new Pool({connectionString:process.env.DATABASE_URL});
+        this.pool.on('connect',()=>{
+            console.log('qns connection established');
+        });
+        this.table = 'questions';
     }
 
     /***
@@ -20,11 +28,18 @@ class Question {
           id: uuid.v4(),
           title: data.title || '',
           body: data.body || '',
-          created_at: moment.now(),
-          updated_at: moment.now()
+          created_by: data.logged_user,
+          created_at: moment().format('YYYY-MM-DD H:mm')
       };
-      this.questions.push(newQuestion);
-      return newQuestion;
+
+      const query = QueryBuilder.insert(this.table,newQuestion);
+      return this.pool.query(query)
+          .then(()=>{
+              return newQuestion;
+          }).catch(()=>{
+              return 'failure';
+      })
+
     }
 
     /***
@@ -33,7 +48,18 @@ class Question {
      * @return {object} question
      */
     findOne(id){
-        return this.questions.find(question=>question.id===id);
+        const question ={
+            id:id
+        };
+        const query = QueryBuilder.fetch(this.table,'*', question);
+        return this.pool.query(query).then((result)=>{
+            if(result.rows.length>0)
+                return result.rows[0];
+            return 'failure';
+        }).catch(()=>{
+            return 'failure';
+        });
+
     }
 
     /***
@@ -41,7 +67,12 @@ class Question {
      * @return {Array}
      */
     findAll(){
-        return this.questions;
+        const query= QueryBuilder.fetchAll(this.table,'*');
+        return this.pool.query(query).then((result)=>{
+            return result.rows
+        }).catch(()=>{
+            return 'failure';
+        });
     }
 
     /***
@@ -49,14 +80,24 @@ class Question {
      * @params id, data
      * @return {object} question
      */
-    update(id,data){
-        const question= this.findOne(id);
-        const index = this.questions.indexOf(question);
-        this.questions[index].title= data.title || question.title;
-        this.questions[index].body= data.body || question.body;
-        this.questions[index].updated_at= moment.now();
+    update(question,data){
+        const newQn ={
+            title:data.title || question.title,
+            body: data.body || question.body,
+            updated_at:  moment().format('YYYY-MM-DD H:mm')
+        };
 
-        return this.questions[index];
+        const query = QueryBuilder.update(this.table,newQn,`id='${question.id}'`);
+        return this.pool.query(query).then((result)=>{
+            if(result.rowCount>0){
+                return 'success';
+            }else {
+                return 'failure';
+            }
+        }).catch(()=>{
+            return 'failure';
+        });
+
     }
 
     /**
@@ -65,10 +106,16 @@ class Question {
      * @return {{}}
      */
     delete(id){
-        const question = this.findOne(id);
-        const index = this.questions.indexOf(question);
-        this.questions.splice(index,1);
-        return {}
+        const query = QueryBuilder.deleteFromTable(this.table,`id='${id}'`);
+        return this.pool.query(query).then((result)=>{
+            if(result.rowCount>0){
+                return 'success';
+            }else {
+                return 'failure';
+            }
+        }).catch(()=>{
+            return 'failure';
+        });
     }
 }
 

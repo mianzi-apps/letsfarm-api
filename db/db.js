@@ -34,7 +34,7 @@ const questionsTbText = `
      id UUID PRIMARY KEY,
      title TEXT NOT NULL,
      body TEXT NOT NULL,
-     created_by TEXT NOT NULL,
+     created_by UUID NOT NULL,
      created_at TIMESTAMP,
      updated_at TIMESTAMP
     )
@@ -46,8 +46,8 @@ const answersTbText = `
         answers(
              id UUID PRIMARY KEY,
              body TEXT NOT NULL,
-             user_id TEXT NOT NULL,
-             question_id TEXT NOT NULL,
+             user_id UUID NOT NULL,
+             question_id UUID NOT NULL,
              created_at TIMESTAMP,
              updated_at TIMESTAMP
         )
@@ -151,7 +151,7 @@ const plantTbtexxt = `
  */
  const createTables =async () => {
     //get all sql stmts
-    const sqlStrings = [usersTbText,];
+    const sqlStrings = [usersTbText, questionsTbText, answersTbText];
     
     //iterate through stmts to create tables
     sqlStrings.forEach(stmt=>{
@@ -170,7 +170,7 @@ const plantTbtexxt = `
  * Drop Tables
  */
 const dropTables = () => {
-    const tables = ['users']
+    const tables = ['users', 'questions', 'answers'];
 
     tables.forEach(table=>{
         let queryText = 'DROP TABLE IF EXISTS '+table;
