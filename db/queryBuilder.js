@@ -27,7 +27,7 @@ class QueryBuilder{
 
     insert(table,object){
         const columns = Object.keys(object).join(',');
-        const values = new QueryBuilder().createValues(object)
+        const values = new QueryBuilder().createValues(object);
         return `INSERT INTO ${table}(${columns}) VALUES (${values});`;
     }
     
@@ -38,6 +38,10 @@ class QueryBuilder{
 
     fetchAll(table,columns){
         return `SELECT ${columns} FROM ${table} `;
+    }
+
+    fetchWithClause(table,columns,clause){
+        return `SELECT ${columns} FROM ${table} WHERE ${clause}`;
     }
     
     update(table,object,whereClause){
