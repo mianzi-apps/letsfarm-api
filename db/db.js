@@ -68,9 +68,9 @@ const votesTbText = `
     CREATE TABLE IF NOT EXISTS 
         votes(
              id UUID PRIMARY KEY, 
-             user_id TEXT NOT NULL,
-             question_id TEXT NOT NULL,
-             vote_type TEXT NOT NULL,
+             user_id UUID NOT NULL,
+             question_id UUID NOT NULL,
+             vote_type BOOLEAN,
              created_at TIMESTAMP,
              updated_at TIMESTAMP
         )
@@ -151,7 +151,10 @@ const plantTbtexxt = `
  */
  const createTables =async () => {
     //get all sql stmts
-    const sqlStrings = [usersTbText, questionsTbText, answersTbText];
+    const sqlStrings = [usersTbText, questionsTbText,
+        answersTbText, votesTbText
+
+    ];
     
     //iterate through stmts to create tables
     sqlStrings.forEach(stmt=>{

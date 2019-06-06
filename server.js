@@ -2,6 +2,7 @@ import express from 'express';
 import questionRoutes from './routes/questionRoutes';
 import userRoutes from './routes/userRoutes';
 import answerRoutes from './routes/answersRoutes';
+import votesRoutes from './routes/votesRoutes';
 import bodyParser from 'body-parser';
 
 require('dotenv').config();
@@ -13,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api/v1',questionRoutes);
 app.use('/api/v1',answerRoutes);
 app.use('/api/v1',userRoutes);
+app.use('/api/v1',votesRoutes);
 
 const PORT=process.env.PORT || 5000;
 
