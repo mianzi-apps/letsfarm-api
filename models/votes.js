@@ -15,36 +15,49 @@ class VotesModel {
        this.table = 'votes';
      }
 
-     create(data){
+     async create(data){
          const newVote = {
              id: uuid.v4(),
              user_id: data.user_id || '',
-             question_id: data.question_id || '',
+             question_id: data.qn_id || '',
              vote_type: data.vote,
              created_at: moment().format('YYYY-MM-DD H:mm')
          };
 
-         const query = QueryBuilder.insert(this.table,newVote);
-         return this.pool.query(query)
-             .then(()=>{
-                 return newVote;
-             }).catch(()=>{
-                 return 'failure';
-             })
+         const voteCheck = await new VotesModel().checkUserVoting(newVote.user_id, newVote.question_id);
+         if (voteCheck==="failure"){
+             const query = QueryBuilder.insert(this.table,newVote);
+             return this.pool.query(query)
+                 .then(()=>{
+                     return newVote;
+                 }).catch(()=>{
+                     return 'failure';
+                 })
+         }else{
+             if(voteCheck.vote_type===newVote.vote_type){
+                 //delete
+                return await new VotesModel().delete(voteCheck.id);
+             }else{
+                 //update
+                 return await new VotesModel().update(voteCheck,newVote);
+             }
+         }
+
      }
 
-     getOne(id){
-         const vote = {
-             id,
-         };
-         const query = QueryBuilder.fetch(this.table,'*', vote);
+     checkUserVoting(userId,qnId){
+         const whereClause =`
+            user_id='${userId}' AND
+            question_id='${qnId}'
+         `;
+         const query = QueryBuilder.fetchWithClause(this.table,'*',whereClause);
          return this.pool.query(query).then((result)=>{
              if(result.rows.length>0)
                  return result.rows[0];
              return 'failure';
          }).catch(()=>{
              return 'failure';
-         });
+         })
      }
 
      update(vote,data){
@@ -53,7 +66,7 @@ class VotesModel {
              updated_at:  moment().format('YYYY-MM-DD H:mm')
          };
 
-         const query = QueryBuilder.update(this.table,newVote,`id='${newVote.id}'`);
+         const query = QueryBuilder.update(this.table,newVote,`id='${vote.id}'`);
          return this.pool.query(query).then((result)=>{
              if(result.rowCount>0){
                  return 'success';
