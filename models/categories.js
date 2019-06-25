@@ -16,14 +16,14 @@ class Categories{
     create(data){
         const newCategory={
             cat_name: data.cat_name,
-            cat_parent: data.cat_parent || "",
-            created_at: moment.format('YYYY-MM-DD H:mm')
+            cat_parent: data.cat_parent || 0,
+            created_at: moment().format('YYYY-MM-DD H:mm')
         };
 
         const query= QueryBuilder.insert(this.table,newCategory);
         return this.pool.query(query).then((res)=>{
             return 'success';
-        }).catch(()=>{
+        }).catch((err)=>{
             return 'failure';
         })
     }
@@ -32,7 +32,7 @@ class Categories{
         const catData={
             cat_name: data.cat_name || oldCat.cat_name,
             cat_parent: data.cat_parent || oldCat.cat_parent,
-            updated_at: moment.format('YYYY-MM-DD H:mm')
+            updated_at: moment().format('YYYY-MM-DD H:mm')
         };
 
         const query= QueryBuilder.update(this.table,catData,`id=${oldCat.id}`);
@@ -44,8 +44,10 @@ class Categories{
     }
 
     getOne(id){
-        const query = QueryBuilder.fetch(this.table,'*',{id});
+        const query = QueryBuilder.fetchWithClause(this.table,'*',`id='${id}'`);
+        console.log(query);
         return this.pool.query(query).then((result)=>{
+            console.log(result);
             if(result.rows.length>0){
                 return result.rows[0];
             }
