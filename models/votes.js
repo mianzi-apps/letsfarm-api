@@ -92,11 +92,11 @@ class VotesModel {
      }
 
      getAll(id){
-         const whereClause =`
-         COUNT(vote_type) filter (where vote_type = TRUE) as up,
-         COUNT(vote_type) filter (where vote_type = FALSE) as down,
+         const columns =`
+          COUNT(vote_type) as vote_count
          `;
-         const query = QueryBuilder.fetchWithClause(this.table,whereClause,`question_id='${id}'`);
+         const query = QueryBuilder.fetchWithClause(this.table,columns,`question_id='${id}' GROUP BY vote_type`);
+         console.log(query);
          return this.pool.query(query).then((result)=>{
              return result.rows;
          }).catch(()=>{

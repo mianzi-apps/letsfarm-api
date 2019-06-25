@@ -20,7 +20,15 @@ const VotesController = {
     },
 
     async getAll(req,res){
+        const { id } = req.params;
+        const result = await QuestionModel.findOne(id);
+        if(result==='failure')
+            return res.status(404).send({'success':false, 'message':'question not found'});
 
+        const votes = await VotesModel.getAll(id);
+        if(votes==='failure')
+            return res.status(400).send({'success':false, 'message':'operation failed'});
+        return res.status(200).send({'success':true,'votes':votes});
     }
 };
 
