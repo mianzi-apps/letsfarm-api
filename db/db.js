@@ -93,7 +93,7 @@ const categoryTbText = `
         categories(
              id SERIAL PRIMARY KEY, 
              cat_name TEXT NOT NULL,
-             cat_parent SERIAL NULL,
+             cat_parent int NULL,
              created_at TIMESTAMP,
              updated_at TIMESTAMP
         )
