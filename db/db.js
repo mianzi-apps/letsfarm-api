@@ -88,12 +88,12 @@ const diseaseTbText = `
         )
 `;
 
-const diseaseHostTbText = `
+const categoryTbText = `
     CREATE TABLE IF NOT EXISTS 
-        disease_host(
-             id UUID PRIMARY KEY, 
-             host_type_id TEXT NOT NULL,
-             host_type TEXT NOT NULL,
+        categories(
+             id SERIAL PRIMARY KEY, 
+             cat_name TEXT NOT NULL,
+             cat_parent int NULL,
              created_at TIMESTAMP,
              updated_at TIMESTAMP
         )
@@ -105,17 +105,6 @@ const practiceTbText = `
              id UUID PRIMARY KEY, 
              title TEXT NOT NULL,
              body TEXT NOT NULL,
-             created_at TIMESTAMP,
-             updated_at TIMESTAMP
-        )
-`;
-
-const practiceTargetTbText = `
-    CREATE TABLE IF NOT EXISTS 
-        practice_target(
-             id UUID PRIMARY KEY, 
-             target_type_id TEXT NOT NULL,
-             target_type TEXT NOT NULL,
              created_at TIMESTAMP,
              updated_at TIMESTAMP
         )
@@ -152,10 +141,9 @@ const plantTbtexxt = `
  const createTables =async () => {
     //get all sql stmts
     const sqlStrings = [usersTbText, questionsTbText,
-        answersTbText, votesTbText
-
+        answersTbText, votesTbText, categoryTbText
     ];
-    
+
     //iterate through stmts to create tables
     sqlStrings.forEach(stmt=>{
         pool.query(stmt)
@@ -166,7 +154,7 @@ const plantTbtexxt = `
             pool.end();
         });
     })
-    
+
 };
 
 /**
@@ -177,7 +165,7 @@ const dropTables = () => {
 
     tables.forEach(table=>{
         let queryText = 'DROP TABLE IF EXISTS '+table;
-        
+
         pool.query(queryText)
         .then((res) => {
             pool.end();
@@ -186,7 +174,7 @@ const dropTables = () => {
             pool.end();
         });
     })
-    
+
 };
 
 pool.on('remove', () => {
