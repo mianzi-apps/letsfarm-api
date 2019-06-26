@@ -1,5 +1,3 @@
-import uuid from 'uuid';
-import moment from 'moment';
 import QueryBuilder from "../db/queryBuilder";
 const {Pool} = require('pg');
 const dotenv = require('dotenv');
