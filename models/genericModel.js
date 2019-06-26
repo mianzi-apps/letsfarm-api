@@ -44,8 +44,13 @@ class Model {
         })
     }
 
-    delete(id){
-        const query = QueryBuilder.deleteFromTable(this.table,`id='${id}'`);
+    delete(id=null,clause=null){
+        let query;
+        if(clause){
+            query = QueryBuilder.deleteFromTable(this.table,clause);
+        }else{
+            query = QueryBuilder.deleteFromTable(this.table,`id='${id}'`);
+        }
         return this.pool.query(query).then((result)=>{
             return 'success';
         }).catch(()=>{

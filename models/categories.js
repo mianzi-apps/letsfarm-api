@@ -1,16 +1,9 @@
 import  moment from 'moment';
-const {Pool} = require('pg');
-const dotenv = require('dotenv');
-dotenv.config();
-import QueryBuilder from '../db/queryBuilder';
+import Model from './genericModel';
 
-class Categories{
-    constructor(){
-        this.table='categories';
-        this.pool = new Pool({connectionString:process.env.DATABASE_URL});
-        this.pool.on('connect',()=>{
-            console.log('categories connection established');
-        })
+class Categories extends Model{
+    constructor(table){
+        super(table);
     }
 
     create(data){
@@ -19,13 +12,8 @@ class Categories{
             cat_parent: data.cat_parent || 0,
             created_at: moment().format('YYYY-MM-DD H:mm')
         };
-
-        const query= QueryBuilder.insert(this.table,newCategory);
-        return this.pool.query(query).then((res)=>{
-            return 'success';
-        }).catch((err)=>{
-            return 'failure';
-        })
+        
+        return super.create(newCategory);
     }
 
     update(oldCat,data){
@@ -34,44 +22,14 @@ class Categories{
             cat_parent: data.cat_parent || oldCat.cat_parent,
             updated_at: moment().format('YYYY-MM-DD H:mm')
         };
-
-        const query= QueryBuilder.update(this.table,catData,`id=${oldCat.id}`);
-        return this.pool.query(query).then((res)=>{
-            return 'success';
-        }).catch(()=>{
-            return 'failure';
-        })
-    }
-
-    getOne(id){
-        const query = QueryBuilder.fetchWithClause(this.table,'*',`id='${id}'`);
-        return this.pool.query(query).then((result)=>{
-            if(result.rows.length>0){
-                return result.rows[0];
-            }
-            return 'failure';
-        }).catch(()=>{
-            return 'failure';
-        })
-    }
-
-    getAll(){
-        const query = QueryBuilder.fetchAll(this.table,'*');
-        return this.pool.query(query).then((result)=>{
-            return result.rows;
-        }).catch(()=>{
-            return 'failure';
-        })
+        const clause = `id=${oldCat.id}`;
+        return super.update(catData,clause);
     }
 
     delete(id){
-        const query = QueryBuilder.deleteFromTable(this.table,`id=${id} or cat_parent=${id}`);
-        return this.pool.query(query).then((result)=>{
-            return 'success';
-        }).catch(()=>{
-            return 'failure';
-        })
+        const clause = `id=${id} or cat_parent=${id}`;
+        return super.delete('',clause);
     }
 }
 
-export default new Categories();
+export default new Categories('categories');
