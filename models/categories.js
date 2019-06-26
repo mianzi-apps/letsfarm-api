@@ -45,9 +45,7 @@ class Categories{
 
     getOne(id){
         const query = QueryBuilder.fetchWithClause(this.table,'*',`id='${id}'`);
-        console.log(query);
         return this.pool.query(query).then((result)=>{
-            console.log(result);
             if(result.rows.length>0){
                 return result.rows[0];
             }
