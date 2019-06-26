@@ -33,4 +33,4 @@ class AnswerModel extends Model{
     }
 }
 
-export default new AnswerModel();
+export default new AnswerModel('answers');

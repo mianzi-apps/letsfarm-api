@@ -28,7 +28,7 @@ const AnswerController ={
             return res.status(400).send({'message': 'target answer identifier is required in the params'})
         }
 
-        const ansResult = await AnswerModel.findOne(id);
+        const ansResult = await AnswerModel.getOne(id);
         if(ansResult==='failure')
             return res.status(404).send({success:false, 'message': 'target answer not found'});
         return res.status(200).send({success:true, answer: ansResult});
@@ -39,7 +39,7 @@ const AnswerController ={
         if(!id){
             return res.status(400).send({'message': 'target answer identifier is required in the params'})
         }
-        const ansResult = await AnswerModel.findOne(id);
+        const ansResult = await AnswerModel.getOne(id);
         if(ansResult==='failure')
             return res.status(404).send({success:false, 'message': 'target answer not found'});
 
@@ -57,10 +57,10 @@ const AnswerController ={
         if(!id){
             return res.status(400).send({'message': 'target answer identifier is required in the params'})
         }
-        const result = await AnswerModel.findOne(id);
+        const result = await AnswerModel.getOne(id);
         if(result==='failure')
             return res.status(404).send({success:false, 'message':'answer not found'});
-        else if(req.decoded.id!==result.created_by) //ensure only owner updates
+        else if(req.decoded.id!==result.user_id)
             return res.status(400).send({'success': false, 'message':'you are not authorized to perform this action'});
 
         const ansResult = await AnswerModel.delete(id);
