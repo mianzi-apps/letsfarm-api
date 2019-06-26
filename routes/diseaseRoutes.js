@@ -4,7 +4,7 @@ import DiseasesController from '../controllers/diseases';
 
 const router = express.Router();
 
-router.post('/disease', checkToken, DiseasesController.create);
+router.post('/disease/:id/create', checkToken, DiseasesController.create);
 router.get('/disease/:id', DiseasesController.getOne);
 router.put('/disease/:id', checkToken, DiseasesController.update);
 router.delete('/disease/:id', DiseasesController.delete);

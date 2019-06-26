@@ -146,7 +146,7 @@ const plantTbtexxt = `
  const createTables =async () => {
     //get all sql stmts
     const sqlStrings = [usersTbText, questionsTbText,
-        answersTbText, votesTbText, categoryTbText
+        answersTbText, votesTbText, categoryTbText, diseaseTbText
     ];
 
     //iterate through stmts to create tables
@@ -166,7 +166,7 @@ const plantTbtexxt = `
  * Drop Tables
  */
 const dropTables = () => {
-    const tables = ['users', 'questions', 'answers'];
+    const tables = ['users', 'questions', 'answers','diseases','votes','categories'];
 
     tables.forEach(table=>{
         let queryText = 'DROP TABLE IF EXISTS '+table;

@@ -21,8 +21,8 @@ class DiseaseModel{
             description: data.description,
             signs: data.signs,
             symptoms: data.symptoms,
-            treatment:data.treatment,
-            category_id:data.category,
+            treatment: data.treatment,
+            category_id: data.category_id,
             created_by: data.user_id,
             created_at: moment().format('YYYY-MM-DD H:mm'),
         };
@@ -31,7 +31,8 @@ class DiseaseModel{
         return this.pool.query(query)
             .then(()=>{
                 return newDisease;
-            }).catch(()=>{
+            }).catch((eer)=>{
+                console.log(eer)
                 return 'failure';
             })
     }
@@ -42,8 +43,8 @@ class DiseaseModel{
             description: data.description || oldDisease.description,
             signs: data.signs || oldDisease.signs,
             symptoms: data.symptoms || oldDisease.symptoms,
-            treatment:data.treatment || oldDisease.treatment,
-            category_id:data.category || oldDisease.category,
+            treatment: data.treatment || oldDisease.treatment,
+            category_id: data.category_id || oldDisease.category_id,
             updated_at: moment().format('YYYY-MM-DD H:mm'),
         };
 
@@ -69,7 +70,7 @@ class DiseaseModel{
     }
 
     delete(id){
-        const query = QueryBuilder.deleteFromTable(this.table,`id=${id}`);
+        const query = QueryBuilder.deleteFromTable(this.table,`id='${id}'`);
         return this.pool.query(query).then((result)=>{
             return 'success';
         }).catch(()=>{
