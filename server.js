@@ -4,6 +4,7 @@ import userRoutes from './routes/userRoutes';
 import answerRoutes from './routes/answersRoutes';
 import votesRoutes from './routes/votesRoutes';
 import categoriesRoutes from './routes/categoriesRoutes';
+import diseasesRoutes from './routes/diseaseRoutes';
 import bodyParser from 'body-parser';
 
 require('dotenv').config();
@@ -17,6 +18,7 @@ app.use('/api/v1',answerRoutes);
 app.use('/api/v1',userRoutes);
 app.use('/api/v1',votesRoutes);
 app.use('/api/v1',categoriesRoutes);
+app.use('/api/v1',diseasesRoutes);
 
 const PORT=process.env.PORT || 5000;
 
