@@ -82,7 +82,12 @@ const diseaseTbText = `
         diseases(
              id UUID PRIMARY KEY, 
              title TEXT NOT NULL,
-             body TEXT NOT NULL,
+             description TEXT NOT NULL,
+             signs TEXT NOT NULL,
+             symptoms TEXT NOT NULL,
+             treatment TEXT NOT NULL,
+             category_id int NOT NULL,
+             created_by UUID NOT NULL,
              created_at TIMESTAMP,
              updated_at TIMESTAMP
         )
@@ -141,7 +146,7 @@ const plantTbtexxt = `
  const createTables =async () => {
     //get all sql stmts
     const sqlStrings = [usersTbText, questionsTbText,
-        answersTbText, votesTbText, categoryTbText
+        answersTbText, votesTbText, categoryTbText, diseaseTbText
     ];
 
     //iterate through stmts to create tables
@@ -161,7 +166,7 @@ const plantTbtexxt = `
  * Drop Tables
  */
 const dropTables = () => {
-    const tables = ['users', 'questions', 'answers'];
+    const tables = ['users', 'questions', 'answers','diseases','votes','categories'];
 
     tables.forEach(table=>{
         let queryText = 'DROP TABLE IF EXISTS '+table;
