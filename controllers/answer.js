@@ -11,7 +11,7 @@ const AnswerController ={
         if(!qn_id){
             return res.status(400).send({'message': 'question being answered is required in the params'})
         }
-        const qnResult = await QuestionModel.findOne(qn_id);
+        const qnResult = await QuestionModel.getOne(qn_id);
         if(qnResult==='failure')
             return res.status(404).send({success:false, 'message': 'target question not found'});
         req.body.logged_user=req.decoded.id;
@@ -75,7 +75,7 @@ const AnswerController ={
             return res.status(400).send({'message': 'target question identifier is required in the params'})
         }
 
-        const result = await QuestionModel.findOne(qn_id);
+        const result = await QuestionModel.getOne(qn_id);
         if(result==='failure')
             return res.status(404).send({success:false, 'message':'question not found'});
 

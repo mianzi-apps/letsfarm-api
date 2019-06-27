@@ -32,8 +32,15 @@ class Model {
             })
     }
 
-    getOne(id){
-        const query = QueryBuilder.fetchWithClause(this.table,'*',`id='${id}'`);
+    getOne(id,object=null,clause=null){
+        let query;
+        if(object){
+            query=QueryBuilder.fetch(this.table,'*',object);
+        }else if(clause){
+            query = QueryBuilder.fetchWithClause(this.table,'*',clause);
+        }else{
+            query = QueryBuilder.fetchWithClause(this.table,'*',`id='${id}'`);
+        }
         return this.pool.query(query).then((result)=>{
             if(result.rows.length>0){
                 return result.rows[0];
@@ -58,10 +65,10 @@ class Model {
         })
     }
 
-    getAll(clause=null){
+    getAll(clause=null,columns=null){
         let query;
         if(clause){
-            query = QueryBuilder.fetchWithClause(this.table,'*',clause);
+            query = QueryBuilder.fetchWithClause(this.table,columns||'*',clause);
         }else{
             query = QueryBuilder.fetchAll(this.table,'*');
         }
