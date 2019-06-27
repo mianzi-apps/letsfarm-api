@@ -37,7 +37,7 @@ const DiseasesController = {
 
     async getOne(req,res){
         const {id} = req.params;
-        const checkDisease = await DiseasesModel.getOne(id);
+        const checkDisease = await DiseasesModel.getOne(`id='${id}'`);
         if(checkDisease==='failure'){
             return res.status(404).send({'success':false,'message':'disease not found'});
         }
@@ -63,7 +63,7 @@ const DiseasesController = {
         if(checkCategory==='failure'){
             return res.status(400).send({'success':false, message:'specified category not found'})
         }
-        const result = await DiseasesModel.getAll(id);
+        const result = await DiseasesModel.getAllInCategory(id);
         if(result==='failure'){
             return res.status(400).send({'success':false, message:'operation failed'})
         }
@@ -71,7 +71,7 @@ const DiseasesController = {
     },
 
     async getAll(req,res){
-        const result = await DiseasesModel.getAllDiseases();
+        const result = await DiseasesModel.getAll();
         if(result==='failure'){
             return res.status(404).send({'success':false,'message':'operation failed'});
         }

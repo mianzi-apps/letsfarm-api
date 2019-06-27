@@ -11,7 +11,7 @@ const AnswerController ={
         if(!qn_id){
             return res.status(400).send({'message': 'question being answered is required in the params'})
         }
-        const qnResult = await QuestionModel.findOne(qn_id);
+        const qnResult = await QuestionModel.getOne(qn_id);
         if(qnResult==='failure')
             return res.status(404).send({success:false, 'message': 'target question not found'});
         req.body.logged_user=req.decoded.id;
@@ -28,7 +28,7 @@ const AnswerController ={
             return res.status(400).send({'message': 'target answer identifier is required in the params'})
         }
 
-        const ansResult = await AnswerModel.findOne(id);
+        const ansResult = await AnswerModel.getOne(id);
         if(ansResult==='failure')
             return res.status(404).send({success:false, 'message': 'target answer not found'});
         return res.status(200).send({success:true, answer: ansResult});
@@ -39,7 +39,7 @@ const AnswerController ={
         if(!id){
             return res.status(400).send({'message': 'target answer identifier is required in the params'})
         }
-        const ansResult = await AnswerModel.findOne(id);
+        const ansResult = await AnswerModel.getOne(id);
         if(ansResult==='failure')
             return res.status(404).send({success:false, 'message': 'target answer not found'});
 
@@ -57,10 +57,10 @@ const AnswerController ={
         if(!id){
             return res.status(400).send({'message': 'target answer identifier is required in the params'})
         }
-        const result = await AnswerModel.findOne(id);
+        const result = await AnswerModel.getOne(id);
         if(result==='failure')
             return res.status(404).send({success:false, 'message':'answer not found'});
-        else if(req.decoded.id!==result.created_by) //ensure only owner updates
+        else if(req.decoded.id!==result.user_id)
             return res.status(400).send({'success': false, 'message':'you are not authorized to perform this action'});
 
         const ansResult = await AnswerModel.delete(id);
@@ -75,7 +75,7 @@ const AnswerController ={
             return res.status(400).send({'message': 'target question identifier is required in the params'})
         }
 
-        const result = await QuestionModel.findOne(qn_id);
+        const result = await QuestionModel.getOne(qn_id);
         if(result==='failure')
             return res.status(404).send({success:false, 'message':'question not found'});
 

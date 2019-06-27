@@ -7,7 +7,7 @@ const VotesController = {
         if (!('vote' in req.body)) {
             return res.status(400).send({'message': 'vote field required'})
         }
-        const result = await QuestionModel.findOne(id);
+        const result = await QuestionModel.getOne(id);
         if(result==='failure')
             return res.status(404).send({'success':false, 'message':'question not found'});
 
@@ -21,7 +21,7 @@ const VotesController = {
 
     async getAll(req,res){
         const { id } = req.params;
-        const result = await QuestionModel.findOne(id);
+        const result = await QuestionModel.getOne(id);
         if(result==='failure')
             return res.status(404).send({'success':false, 'message':'question not found'});
 

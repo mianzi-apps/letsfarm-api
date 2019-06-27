@@ -26,7 +26,7 @@ const Question = {
      * @return {object} questions
      */
     async getAll(req,res){
-        const result = await QuestionModel.findAll();
+        const result = await QuestionModel.getAll();
         if(result==='failure')
             return res.status(400).send({success:false, message: 'could not perform action'});
         return res.status(200).send({success:true, questions:result});
@@ -38,7 +38,7 @@ const Question = {
      * @return {object} question
      */
     async getOne(req,res){
-        const result = await QuestionModel.findOne(req.params.id);
+        const result = await QuestionModel.getOne(req.params.id);
         if(result==='failure')
             return res.status(404).send({'success':false, 'message':'question not found'});
         return res.status(200).send({'success':true, 'question':result});
@@ -50,7 +50,7 @@ const Question = {
      * @return {*|void}
      */
     async update(req,res){
-        const result = await QuestionModel.findOne(req.params.qn_id);
+        const result = await QuestionModel.getOne(req.params.qn_id);
         if(result==='failure')
             return res.status(404).send({'success': false, 'message':'question not found'});
 
@@ -70,7 +70,7 @@ const Question = {
      * @return {object}
      */
     async delete(req,res){
-        const result = await QuestionModel.findOne(req.params.id);
+        const result = await QuestionModel.getOne(req.params.id);
         if(result==='failure')
             return res.status(404).send({success:false, 'message':'question not found'});
         else if(req.decoded.id!==result.created_by) //ensure only owner updates
