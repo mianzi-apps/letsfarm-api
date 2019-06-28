@@ -9,7 +9,7 @@ class ProjectsModel extends Model{
     create(data){
         const newProject ={
             title:data.title,
-            image_url:data.image_url,
+            image_url:data.image_url||'',
             user_id: data.user_id,
             public: 0,
             created_at:  moment().format('YYYY-MM-DD H:mm')
@@ -35,4 +35,4 @@ class ProjectsModel extends Model{
 
 }
 
-export default ProjectsModel('projects');
+export default new ProjectsModel('projects');

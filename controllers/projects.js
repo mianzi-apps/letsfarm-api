@@ -18,7 +18,7 @@ const ProjectController = {
         const check = await ProjectsModel.getOne(id);
         if(check==='failure')
             return res.status(404).send({success:false, message:'project not found'});
-        const update = await ProjectsModel.update(check,req.data);
+        const update = await ProjectsModel.update(check,req.body);
         if(update==='failure')
             return res.status(404).send({success:false, message:'could not update'});
         return res.status(200).send({success:true, message:'project updated'});
