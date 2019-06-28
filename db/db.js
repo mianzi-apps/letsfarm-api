@@ -76,6 +76,16 @@ const votesTbText = `
         )
 `;
 //vote type ;_ i.e up vote or down vote
+const categoryTbText = `
+    CREATE TABLE IF NOT EXISTS 
+        categories(
+             id SERIAL PRIMARY KEY, 
+             cat_name TEXT NOT NULL,
+             cat_parent int NULL,
+             created_at TIMESTAMP,
+             updated_at TIMESTAMP
+        )
+`;
 
 const diseaseTbText = `
     CREATE TABLE IF NOT EXISTS 
@@ -93,12 +103,14 @@ const diseaseTbText = `
         )
 `;
 
-const categoryTbText = `
+const projectsTbText = `
     CREATE TABLE IF NOT EXISTS 
-        categories(
+        projects(
              id SERIAL PRIMARY KEY, 
-             cat_name TEXT NOT NULL,
-             cat_parent int NULL,
+             title TEXT NOT NULL,
+             image_url TEXT NULL,
+             user_id UUID NOT NULL,
+             public int NOT NULL,
              created_at TIMESTAMP,
              updated_at TIMESTAMP
         )
@@ -146,7 +158,8 @@ const plantTbtexxt = `
  const createTables =async () => {
     //get all sql stmts
     const sqlStrings = [usersTbText, questionsTbText,
-        answersTbText, votesTbText, categoryTbText, diseaseTbText
+        answersTbText, votesTbText, categoryTbText,
+        diseaseTbText, projectsTbText
     ];
 
     //iterate through stmts to create tables
