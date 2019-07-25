@@ -1,4 +1,5 @@
-{
+require('dotenv').config();
+const env={
   "development": {
     "use_env_variable": "DATABASE_URL",
     "username": "root",
@@ -26,4 +27,6 @@
     "dialect": "mysql",
     "operatorsAliases": false
   }
-}
+};
+
+module.exports = env;

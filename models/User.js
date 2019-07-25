@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     log_type: DataTypes.STRING,
     role: DataTypes.STRING
   }, {});
-  
+
   User.associate = function(models) {
       User.hasMany(models.Question,{
           foreignKey:'created_by',

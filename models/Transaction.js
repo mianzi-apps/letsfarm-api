@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     trans_type: DataTypes.BOOLEAN,
     amount: DataTypes.INTEGER
   }, {});
+
   Transaction.associate = function(models) {
       Transaction.belongsTo(models.User,{
           foreignKey:'created_by',
