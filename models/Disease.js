@@ -1,20 +1,23 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Practice = sequelize.define('Practice', {
+  const Disease = sequelize.define('Disease', {
     title: DataTypes.STRING,
     description: DataTypes.TEXT,
-    step_level: DataTypes.INTEGER
+    signs: DataTypes.TEXT,
+    symptoms: DataTypes.TEXT,
+    treatment: DataTypes.TEXT
   }, {});
-  Practice.associate = function(models) {
-      Practice.belongsTo(models.User,{
+
+  Disease.associate = function(models) {
+      Disease.belongsTo(models.User,{
           foreignKey:'created_by',
           as:'owner'
       });
 
-      Practice.belongsTo(models.Category,{
+      Disease.belongsTo(models.Category,{
           foreignKey:'category_id',
           as:'category'
       });
   };
-  return Practice;
+  return Disease;
 };

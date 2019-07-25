@@ -1,5 +1,5 @@
-import ProjectsModel from '../models/projects';
-import UserModel from "../models/user";
+import ProjectsModel from '../modelsp/projects';
+import UserModel from "../modelsp/user";
 
 const ProjectController = {
     async create(req,res){

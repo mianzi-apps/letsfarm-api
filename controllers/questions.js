@@ -1,4 +1,4 @@
-import QuestionModel from '../models/question';
+import QuestionModel from '../modelsp/question';
 
 const Question = {
     /**

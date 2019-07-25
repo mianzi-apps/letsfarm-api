@@ -1,8 +1,8 @@
-import UserModel from '../models/user';
+import UserModel from '../modelsp/user';
 import { generateToken } from '../middleware/authentication';
 
 const UserController={
-    
+
     /**
      * @param req
      * @param res
@@ -19,7 +19,7 @@ const UserController={
             result.token = generateToken({'id':result.id});
             return res.status(201).send(result);
         }
-        
+
     },
 
     async login(req, res){

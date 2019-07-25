@@ -1,5 +1,5 @@
-import DiseasesModel from '../models/diseases';
-import CategoriesModel from '../models/categories';
+import DiseasesModel from '../modelsp/diseases';
+import CategoriesModel from '../modelsp/categories';
 
 const DiseasesController = {
     async create(req,res){

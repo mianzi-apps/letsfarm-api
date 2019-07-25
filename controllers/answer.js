@@ -1,5 +1,5 @@
-import AnswerModel from '../models/answer';
-import QuestionModel from '../models/question';
+import AnswerModel from '../modelsp/answer';
+import QuestionModel from '../modelsp/question';
 
 const AnswerController ={
 

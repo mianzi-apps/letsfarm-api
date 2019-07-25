@@ -1,4 +1,4 @@
-import CategoriesModel from '../models/categories';
+import CategoriesModel from '../modelsp/categories';
 
 const CategoriesController = {
     async create(req,res){

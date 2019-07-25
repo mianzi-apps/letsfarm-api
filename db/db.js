@@ -14,7 +14,7 @@ const usersTbText = `
     CREATE TABLE IF NOT EXISTS 
         users(
              id UUID PRIMARY KEY,
-             display_name VARCHAR(50) NOT NULL,
+             display_name VARCHAR(50) NOT NULL,a
              name VARCHAR(100) NOT NULL,
              email VARCHAR(70) NOT NULL UNIQUE,
              phone VARCHAR(30),
@@ -28,7 +28,7 @@ const usersTbText = `
 `;
 
 // sql string for creating tables
-const questionsTbText = `
+const questionsTbText = `t
     CREATE TABLE IF NOT EXISTS 
     questions(
      id UUID PRIMARY KEY,
@@ -81,7 +81,7 @@ const categoryTbText = `
         categories(
              id SERIAL PRIMARY KEY, 
              cat_name TEXT NOT NULL,
-             cat_parent int NULL,
+             cat_parent int NULL,sst
              created_at TIMESTAMP,
              updated_at TIMESTAMP
         )
@@ -121,7 +121,8 @@ const practiceTbText = `
         practices(
              id UUID PRIMARY KEY, 
              title TEXT NOT NULL,
-             body TEXT NOT NULL,
+             description TEXT NOT NULL,
+             step_level integer,
              created_at TIMESTAMP,
              updated_at TIMESTAMP
         )
@@ -151,19 +152,6 @@ const plantTbtexxt = `
         )
 `;
 
-const practicesTbText = `
-    CREATE TABLE IF NOT EXISTS 
-        practices(
-            id UUID PRIMARY KEY,
-            title TEXT NOT NULL,
-            description VARCHAR(225) NOT NULL,
-            steps TEXT NULL,
-            created_by UUID NOT NULL,
-            created_at TIMESTAMP,
-            updated_at TIMESTAMP
-        )
-`;
-
 
 /**
  * Create Tables
@@ -172,8 +160,7 @@ const practicesTbText = `
     //get all sql stmts
     const sqlStrings = [usersTbText, questionsTbText,
         answersTbText, votesTbText, categoryTbText,
-        diseaseTbText, projectsTbText,
-        practicesTbText
+        diseaseTbText, projectsTbText, practiceTbText
     ];
 
     //iterate through stmts to create tables
@@ -193,7 +180,7 @@ const practicesTbText = `
  * Drop Tables
  */
 const dropTables = () => {
-    const tables = ['users', 'questions', 'answers','diseases','votes','categories','practices'];
+    const tables = ['users', 'questions', 'answers','diseases','votes','categories'];
 
     tables.forEach(table=>{
         let queryText = 'DROP TABLE IF EXISTS '+table;

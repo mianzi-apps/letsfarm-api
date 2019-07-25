@@ -1,5 +1,5 @@
-import VotesModel from '../models/votes';
-import QuestionModel from "../models/question";
+import VotesModel from '../modelsp/votes';
+import QuestionModel from "../modelsp/question";
 
 const VotesController = {
     async create(req, res){
