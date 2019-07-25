@@ -151,6 +151,19 @@ const plantTbtexxt = `
         )
 `;
 
+const practicesTbText = `
+    CREATE TABLE IF NOT EXISTS 
+        practices(
+            id UUID PRIMARY KEY,
+            title TEXT NOT NULL,
+            description VARCHAR(225) NOT NULL,
+            steps TEXT NULL,
+            created_by UUID NOT NULL,
+            created_at TIMESTAMP,
+            updated_at TIMESTAMP
+        )
+`;
+
 
 /**
  * Create Tables
@@ -159,7 +172,8 @@ const plantTbtexxt = `
     //get all sql stmts
     const sqlStrings = [usersTbText, questionsTbText,
         answersTbText, votesTbText, categoryTbText,
-        diseaseTbText, projectsTbText
+        diseaseTbText, projectsTbText,
+        practicesTbText
     ];
 
     //iterate through stmts to create tables
@@ -179,7 +193,7 @@ const plantTbtexxt = `
  * Drop Tables
  */
 const dropTables = () => {
-    const tables = ['users', 'questions', 'answers','diseases','votes','categories'];
+    const tables = ['users', 'questions', 'answers','diseases','votes','categories','practices'];
 
     tables.forEach(table=>{
         let queryText = 'DROP TABLE IF EXISTS '+table;
