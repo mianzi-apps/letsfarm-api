@@ -47,7 +47,7 @@ const QuestionController = {
                 include:[{ model: User, as: 'owner' }]
             }).then((question)=>{
             return res.status(200).send({'success':true, question});
-        }).then(()=>{
+        }).catch(()=>{
             return res.status(404).send({'success':false, 'message':'question not found'});
         });
     },
@@ -69,7 +69,7 @@ const QuestionController = {
                     return res.status(200).send({'success': true,'message':'update successfully'});
                 })
             }
-        }).then(()=>{
+        }).catch(()=>{
             return res.status(404).send({'success':false, 'message':'question not found'});
         });
 

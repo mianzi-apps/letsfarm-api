@@ -13,10 +13,10 @@ const VotesController = {
         }).then((question)=>{
             req.body.created_by=req.decoded.id;
             req.body.question_id=question.id;
-            return Vote.create(req.body).then(()=>{
+            Vote.create(req.body).then(()=>{
                 return res.status(200).send({'success':true, 'message':'vote recorded'});
             })
-        }).then(()=>{
+        }).catch(()=>{
             return res.status(404).send({'success':false, 'message':'question not found'});
         });
 
@@ -28,16 +28,16 @@ const VotesController = {
         Question.findOne({
             where: {id},
         }).then(()=>{
-            return Vote.count({
+            Vote.count({
                 where: {question_id:id, vote_type:true},
             }).then((trueVotes)=>{
-                return Vote.count({
+                Vote.count({
                     where: {question_id:id, vote_type:false},
                 }).then((falseVotes)=> {
                     return res.status(200).send({'success':true, up_votes:trueVotes, down_votes:falseVotes});
                 });
             })
-        }).then(()=>{
+        }).catch(()=>{
             return res.status(404).send({'success':false, 'message':'question not found'});
         });
     }
