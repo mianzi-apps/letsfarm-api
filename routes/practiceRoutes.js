@@ -6,7 +6,7 @@ let router = express.Router();
 
 router.get('/practices',PracticeController.getAll);
 router.post('/practices', checkToken, PracticeController.create);
-router.put('/practices/:qn_id',checkToken, PracticeController.update);
+router.put('/practices/:id',checkToken, PracticeController.update);
 router.get('/practices/:id',PracticeController.getOne);
 router.delete('/practices/:id',checkToken, PracticeController.delete);
 
