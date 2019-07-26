@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.TEXT,
     step_level: DataTypes.INTEGER
   }, {});
+
   Practice.associate = function(models) {
       Practice.belongsTo(models.User,{
           foreignKey:'created_by',

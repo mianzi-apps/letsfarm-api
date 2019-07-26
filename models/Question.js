@@ -1,9 +1,12 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Question = sequelize.define('Question', {
-    id: DataTypes.UUID,
-    title: DataTypes.STRING,
-    body: DataTypes.TEXT
+      id: {
+          type:DataTypes.UUID,
+          primaryKey:true
+      },
+      title: DataTypes.STRING,
+      body: DataTypes.TEXT
   }, {});
   Question.associate = function(models) {
       Question.belongsTo(models.User,{

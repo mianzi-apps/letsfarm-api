@@ -1,7 +1,10 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    id: DataTypes.UUID,
+    id: {
+        type:DataTypes.UUID,
+        primaryKey:true
+    },
     display_name: DataTypes.STRING,
     name: DataTypes.STRING,
     email: DataTypes.STRING,
@@ -10,7 +13,11 @@ module.exports = (sequelize, DataTypes) => {
     auth_token: DataTypes.STRING,
     log_type: DataTypes.STRING,
     role: DataTypes.STRING
-  }, {});
+  }, {
+      defaultScope: {
+          attributes: { exclude: ['password'] },
+      }
+  });
 
   User.associate = function(models) {
       User.hasMany(models.Question,{

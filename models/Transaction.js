@@ -1,9 +1,12 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Transaction = sequelize.define('Transaction', {
-    id: DataTypes.UUID,
-    trans_type: DataTypes.BOOLEAN,
-    amount: DataTypes.INTEGER
+      id: {
+          type:DataTypes.UUID,
+          primaryKey:true
+      },
+      trans_type: DataTypes.BOOLEAN,
+      amount: DataTypes.INTEGER
   }, {});
 
   Transaction.associate = function(models) {

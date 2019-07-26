@@ -13,8 +13,10 @@ const UserController={
         if (!req.body.display_name && !req.body.name) {
             return res.status(400).send({'message': 'All fields are required'})
         }
-        User.create({...req.body,id :uuid.v4()}).then((user)=>{
-            return res.status(201).send(user);
+        req.body.id = uuid.v4();
+        User.create(req.body).then((user)=>{
+            const token = generateToken({'id':user.id});
+            return res.status(201).send({user,token});
         }).catch(()=>{
             return res.status(400).send({message:'operation failed'});
         })
@@ -24,9 +26,9 @@ const UserController={
         const {email,password} = req.body;
         User.findOne({
             where:{email,password}
-        }).then((user)=>{
-            user.token = generateToken({'id':user.id});
-            return res.status(201).send(user);
+        }).then(user=>{
+            const token = generateToken({'id':user.id});
+            return res.status(200).send({user,token});
         }).catch(()=>{
             return res.status(404).send({message:'invalid credentials'});
         });
