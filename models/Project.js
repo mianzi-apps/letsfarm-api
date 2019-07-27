@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey:'created_by',
           as:'owner'
       });
+      
 
   };
   return Project;

@@ -1,4 +1,5 @@
 const Practice = require('../models').Practice;
+const Category = require('../models').Category;
 
 const PracticeController = {
     create(req,res){
@@ -14,7 +15,9 @@ const PracticeController = {
     },
 
     getAll(req,res){
-        Practice.findAll().then((practices)=>{
+        Practice.findAll({
+            include:[{model:Category, as:'category'}]
+        }).then((practices)=>{
             return res.status(200).send({success:true, practices});
         }).catch(()=>{
             return res.status(400).send({success:false, message: 'could not perform action'});
@@ -23,8 +26,9 @@ const PracticeController = {
 
     getOne(req,res){
         Practice.findOne({
-            where:{id:req.params.id}
-            }).then((practice)=>{
+            where:{id:req.params.id},
+            include:[{model:Category, as:'category'}]
+        }).then((practice)=>{
             return res.status(200).send({'success':true,practice });
         }).catch(()=>{
             return res.status(404).send({'success':false, 'message':'practice not found'});

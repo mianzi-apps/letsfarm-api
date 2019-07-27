@@ -5,10 +5,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
 
   Category.associate = function(models) {
-      Category.belongsTo(models.User,{
-          foreignKey:'created_by',
-          as:'owner'
-      });
+      // Category.belongsTo(models.User,{
+      //     foreignKey:'created_by',
+      //     as:'owner'
+      // });
 
       Category.hasMany(models.Disease,{
           foreignKey:'category_id',
@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       Category.hasMany(models.Practice,{
-          foreignKey:'practice_id',
+          foreignKey:'category_id',
           as:'practices'
       });
   };

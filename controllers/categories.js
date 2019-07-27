@@ -1,9 +1,11 @@
 const Category = require('../models').Category;
+const Disease = require('../models').Disease;
+const Practice = require('../models').Practice;
 
 const CategoriesController = {
     create(req,res){
-        if(!('cat_name' in req.body) || !req.body.cat_name){
-            return res.status(400).send({'success':false,'message':'cat_name field is required'});
+        if(!('name' in req.body) || !req.body.name){
+            return res.status(400).send({'success':false,'message':'name field is required'});
         }
 
         Category.create(req.body).then((category)=>{
@@ -63,10 +65,12 @@ const CategoriesController = {
     },
 
     getAll(req,res){
-        Category.findAll().then((categories)=>{
+        Category.findAll({
+            include:[{model:Disease, as:'diseases'}, {model:Practice, as:'practices'}]
+        }).then((categories)=>{
             return res.status(200).send({'success':true, categories});
-        }).catch(()=>{
-            return res.status(400).send({'success':false,'message':'operation failed'});
+        }).catch((err)=>{
+            return res.status(400).send({'success':false,'message':'operation failed'+err});
         });
     }
 };
