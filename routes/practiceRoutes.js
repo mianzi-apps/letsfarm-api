@@ -5,9 +5,9 @@ import { checkToken } from '../middleware/authentication';
 let router = express.Router();
 
 router.get('/practices',PracticeController.getAll);
-router.post('/practices', checkToken, PracticeController.create);
-router.put('/practices/:qn_id',checkToken, PracticeController.update);
-router.get('/practices/:id',PracticeController.getOne);
-router.delete('/practices/:id',checkToken, PracticeController.delete);
+router.post('/practice', checkToken, PracticeController.create);
+router.put('/practice/:id',checkToken, PracticeController.update);
+router.get('/practice/:id',PracticeController.getOne);
+router.delete('/practice/:id',checkToken, PracticeController.delete);
 
 export default router;

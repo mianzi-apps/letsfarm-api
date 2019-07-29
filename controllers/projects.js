@@ -1,57 +1,80 @@
-import ProjectsModel from '../models/projects';
-import UserModel from "../models/user";
+import uuid from "uuid";
+const Project = require('../models').Project;
+const User = require('../models').User;
 
 const ProjectController = {
-    async create(req,res){
+    create(req,res){
         const {title} = req.body;
         if(!title){
             return res.status(400).send({success:false, message:'title is required'});
         }
-        req.body.user_id = req.decoded.id;
-        const create = await ProjectsModel.create(req.body);
-        if(create==='failure')
+        req.body.created_by = req.decoded.id;
+        req.body.id = uuid.v4();
+        Project.create(req.body).then((project)=>{
+            return res.status(201).send({success:true, message:'project created', project});
+        }).catch(()=>{
             return res.status(400).send({success:false, message:'creation failed'});
-        return res.status(201).send({success:true, message:'project created', data:create});
-    },
-    async update(req,res){
-        const {id} = req.params;
-        const check = await ProjectsModel.getOne(id);
-        if(check==='failure')
-            return res.status(404).send({success:false, message:'project not found'});
-        const update = await ProjectsModel.update(check,req.body);
-        if(update==='failure')
-            return res.status(404).send({success:false, message:'could not update'});
-        return res.status(200).send({success:true, message:'project updated'});
+        });
     },
 
-    async delete(req,res){
+    update(req,res){
         const {id} = req.params;
-        const check = await ProjectsModel.getOne(id);
-        if(check==='failure')
+        Project.findOne({
+            where:{id},
+            include:[{model:User, as:'owner'}]
+        }).then((project)=>{
+            if(project.owner.id=req.decoded.id){
+                project.update(req.body).then(()=>{
+                    return res.status(200).send({success:true, message:'project updated'});
+                })
+            }else{
+                return res.status(400).send({success:false, message:'you are not authorized to perform this operation'});
+            }
+        }).catch(()=>{
             return res.status(404).send({success:false, message:'project not found'});
-        const result = await ProjectsModel.delete(id);
-        if(result==='failure')
-            return res.status(404).send({success:false, message:'could not delete'});
-        return res.status(200).send({success:true, message:'project deleted'});
+        });
     },
 
-    async getProject(req,res){
+    delete(req,res){
         const {id} = req.params;
-        const check = await ProjectsModel.getOne(id);
-        if(check==='failure')
+        Project.findOne({
+            where:{id},
+            include:[{model:User, as:'owner'}]
+        }).then((project)=>{
+            if(project.owner.id=req.decoded.id){
+                project.destroy().then(()=>{
+                    return res.status(200).send({success:true, message:'project deleted'});
+                })
+            }else{
+                return res.status(400).send({success:false, message:'you are not authorized to perform this operation'});
+            }
+        }).catch(()=>{
             return res.status(404).send({success:false, message:'project not found'});
-        return res.status(200).send({success:true, data:check});
+        });
     },
 
-    async getUserProjects(req,res){
+    getProject(req,res){
         const {id} = req.params;
-        const check = await UserModel.getOne(id);
-        if(check==='failure')
+        Project.findOne({
+            where:{id},
+            include:[{model:User, as:'owner'}]
+        }).then((project)=>{
+            return res.status(200).send({success:true, project});
+        }).catch(()=>{
+            return res.status(404).send({success:false, message:'project not found'});
+        });
+    },
+
+    getUserProjects(req,res){
+        const {id} = req.params;
+        User.findOne({
+            where:{id},
+            include:[{model:Project, as:'projects'}]
+        }).then((data)=>{
+            return res.status(200).send({success:true, data});
+        }).catch(()=>{
             return res.status(404).send({success:false, message:'user not found'});
-        const projects = await ProjectsModel.getAll(id);
-        if(projects==='failure')
-            return res.status(400).send({success:false, message:'operation failed'});
-        return res.status(200).send({success:true, data:projects});
+        });
     },
 
 };

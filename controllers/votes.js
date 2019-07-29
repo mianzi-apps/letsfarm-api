@@ -1,34 +1,45 @@
-import VotesModel from '../models/votes';
-import QuestionModel from "../models/question";
+const Vote = require('../models').Vote;
+const Question = require('../models').Question;
+const sequelize = require('../models').sequelize;
 
 const VotesController = {
-    async create(req, res){
+    create(req, res){
         const { id } = req.params;
-        if (!('vote' in req.body)) {
+        if (!('vote_type' in req.body)) {
             return res.status(400).send({'message': 'vote field required'})
         }
-        const result = await QuestionModel.getOne(id);
-        if(result==='failure')
+        Question.findOne({
+            where: {id},
+        }).then((question)=>{
+            req.body.created_by=req.decoded.id;
+            req.body.question_id=question.id;
+            Vote.create(req.body).then(()=>{
+                return res.status(200).send({'success':true, 'message':'vote recorded'});
+            })
+        }).catch(()=>{
             return res.status(404).send({'success':false, 'message':'question not found'});
+        });
 
-        req.body.user_id=req.decoded.id;
-        req.body.qn_id=id;
-        const createVote = await  VotesModel.create(req.body);
-        if(createVote==='failure')
-            return res.status(400).send({'success':false, 'message':'operation failed'});
-        return res.status(200).send({'success':true, 'message':'vote recorded'});
     },
 
-    async getAll(req,res){
+    getAll(req,res){
         const { id } = req.params;
-        const result = await QuestionModel.getOne(id);
-        if(result==='failure')
-            return res.status(404).send({'success':false, 'message':'question not found'});
 
-        const votes = await VotesModel.getAll(id);
-        if(votes==='failure')
-            return res.status(400).send({'success':false, 'message':'operation failed'});
-        return res.status(200).send({'success':true,'votes':votes});
+        Question.findOne({
+            where: {id},
+        }).then(()=>{
+            Vote.count({
+                where: {question_id:id, vote_type:true},
+            }).then((trueVotes)=>{
+                Vote.count({
+                    where: {question_id:id, vote_type:false},
+                }).then((falseVotes)=> {
+                    return res.status(200).send({'success':true, up_votes:trueVotes, down_votes:falseVotes});
+                });
+            })
+        }).catch(()=>{
+            return res.status(404).send({'success':false, 'message':'question not found'});
+        });
     }
 };
 

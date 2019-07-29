@@ -15,6 +15,13 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+//cross origin
+app.use( (request, response, next) => {
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 app.use('/api/v1',questionRoutes);
 app.use('/api/v1',answerRoutes);
 app.use('/api/v1',userRoutes);
