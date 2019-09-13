@@ -50,7 +50,7 @@ const DiseasesController = {
         Disease.findOne({
             where:{id}
         }).then((disease)=> {
-            disease.delete().then(()=>{
+            disease.destroy().then(()=>{
                 return res.status(200).send({'success':true, message:'disease deleted'})
             })
         }).catch(()=>{
