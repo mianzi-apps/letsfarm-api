@@ -1,6 +1,6 @@
 const Answer = require('../models').Answer;
 const Question = require('../models').Question;
-
+const User = require('../models').User;
 const AnswerController ={
 
     create(req,res){
@@ -95,9 +95,9 @@ const AnswerController ={
         if(!id){
             return res.status(400).send({'message': 'target question identifier is required in the params'})
         }
-        Question.findOne({
-            where:{id},
-            include:[{model:Answer, as:'answers'}]
+        Answer.findAll({
+            where:{question_id:id},
+            include:[{model:User, as:'owner'}]
         }).then((question)=>{
             return res.status(201).send({success:true, question})
         }).catch(()=>{
