@@ -98,8 +98,8 @@ const AnswerController ={
         Answer.findAll({
             where:{question_id:id},
             include:[{model:User, as:'owner'}]
-        }).then((question)=>{
-            return res.status(201).send({success:true, question})
+        }).then((answers)=>{
+            return res.status(201).send({success:true, answers})
         }).catch(()=>{
             return res.status(404).send({success:false, 'message': 'target question not found'});
         });
